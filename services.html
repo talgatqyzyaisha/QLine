@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QLine — Клиники и услуги</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="header">
+    <div class="container header__inner">
+        <a class="logo" href="index.html"><span class="logo__icon">♡</span><span>QLine</span></a>
+        <nav class="nav" aria-label="Навигация">
+            <a class="nav__link" href="doctors.html">Врачи</a>
+            <a class="nav__link active" href="services.html#clinics">Клиники</a>
+            <a class="nav__link" href="services.html#services">Услуги</a>
+            <a class="nav__link" href="index.html#how-it-works">О нас</a>
+            <a class="nav__link" href="doctors.html">Мои записи</a>
+        </nav>
+        <div class="header__actions">
+            <a class="search-link" href="doctors.html">⌕</a>
+            <a class="btn btn--outline" href="doctors.html">Войти</a>
+            <a class="btn btn--primary" href="doctors.html">Регистрация</a>
+        </div>
+    </div>
+</header>
+
+<main>
+    <section class="page-hero page-hero--compact">
+        <div class="container">
+            <p class="eyebrow">QLine / Клиники и услуги</p>
+            <h1>Стоматологические клиники и услуги</h1>
+            <p>Выберите направление, чтобы найти подходящую клинику и специалиста.</p>
+        </div>
+    </section>
+
+    <section class="section" id="clinics">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Клиники</h2>
+                <a class="view-all" href="doctors.html">Найти врача ﹥</a>
+            </div>
+
+            <div class="clinic-grid">
+                <article class="clinic-card">
+                    <div class="clinic-card__image clinic-image--1"><span>Q</span></div>
+                    <div class="clinic-card__body">
+                        <div class="clinic-card__top">
+                            <h2>Dental Center</h2>
+                            <span class="rating-badge">★ 4.9</span>
+                        </div>
+                        <p class="clinic-address">• Алматы, ул. Абая, 52</p>
+                        <p>Современная клиника с терапией, хирургией и ортодонтией.</p>
+                        <div class="clinic-tags">
+                            <span>12 врачей</span>
+                            <span>Без выходных</span>
+                        </div>
+                        <a class="btn btn--primary" href="doctors.html">Выбрать врача</a>
+                    </div>
+                </article>
+
+                <article class="clinic-card">
+                    <div class="clinic-card__image clinic-image--2"><span>Q</span></div>
+                    <div class="clinic-card__body">
+                        <div class="clinic-card__top">
+                            <h2>Your Smile</h2>
+                            <span class="rating-badge">★ 4.8</span>
+                        </div>
+                        <p class="clinic-address">• Алматы, пр. Достык, 91</p>
+                        <p>Семейная стоматология с диагностикой и лечением под микроскопом.</p>
+                        <div class="clinic-tags">
+                            <span>9 врачей</span>
+                            <span>Диагностика</span>
+                        </div>
+                        <a class="btn btn--primary" href="doctors.html">Выбрать врача</a>
+                    </div>
+                </article>
+
+                <article class="clinic-card">
+                    <div class="clinic-card__image clinic-image--3"><span>Q</span></div>
+                    <div class="clinic-card__body">
+                        <div class="clinic-card__top">
+                            <h2>White Smile</h2>
+                            <span class="rating-badge">★ 4.7</span>
+                        </div>
+                        <p class="clinic-address">• Алматы, ул. Жарокова, 118</p>
+                        <p>Эстетическая стоматология, имплантация и профессиональная гигиена.</p>
+                        <div class="clinic-tags">
+                            <span>15 врачей</span>
+                            <span>Имплантация</span>
+                        </div>
+                        <a class="btn btn--primary" href="doctors.html">Выбрать врача</a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="services">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Услуги</h2>
+            </div>
+            <div class="service-grid">
+                <a class="service-card" href="doctors.html?search=терапевт">
+                    <div class="service-card__icon">✦</div>
+                    <h2>Лечение зубов</h2>
+                    <p>Кариес, пломбы, лечение каналов и профилактический осмотр.</p>
+                    <span>Найти врача ﹥</span>
+                </a>
+                <a class="service-card" href="doctors.html?search=ортодонт">
+                    <div class="service-card__icon">⌁</div>
+                    <h2>Ортодонтия</h2>
+                    <p>Брекеты, элайнеры, коррекция прикуса и консультация ортодонта.</p>
+                    <span>Найти врача ﹥</span>
+                </a>
+                <a class="service-card" href="doctors.html?search=хирург">
+                    <div class="service-card__icon">◇</div>
+                    <h2>Хирургия</h2>
+                    <p>Удаление зубов, имплантация и хирургические консультации.</p>
+                    <span>Найти врача ﹥</span>
+                </a>
+                <a class="service-card" href="doctors.html">
+                    <div class="service-card__icon">♡</div>
+                    <h2>Профессиональная гигиена</h2>
+                    <p>Чистка зубов, удаление налёта и рекомендации по уходу.</p>
+                    <span>Найти врача ﹥</span>
+                </a>
+                <a class="service-card" href="doctors.html">
+                    <div class="service-card__icon">✧</div>
+                    <h2>Отбеливание</h2>
+                    <p>Профессиональные процедуры для более светлой и здоровой улыбки.</p>
+                    <span>Найти врача ﹥</span>
+                </a>
+                <a class="service-card" href="doctors.html">
+                    <div class="service-card__icon">◉</div>
+                    <h2>Протезирование</h2>
+                    <p>Коронки, виниры и другие решения для восстановления зубов.</p>
+                    <span>Найти врача ﹥</span>
+                </a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <div class="container footer__inner">
+        <div class="logo"><span class="logo__icon">♡</span><span>QLine</span></div>
+        <p>Платформа для онлайн-записи к стоматологу</p>
+        <p>© 2026 QLine</p>
+    </div>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>

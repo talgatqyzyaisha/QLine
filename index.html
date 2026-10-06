@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QLine — Платформа для онлайн-записи к стоматологу</title>
+    <meta name="description" content="QLine — платформа для онлайн-записи к стоматологу">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header__inner">
+            <a class="logo" href="index.html" aria-label="Главная">
+                <span class="logo__icon">♡</span>
+                <span>QLine</span>
+            </a>
+
+            <nav class="nav" aria-label="Навигация">
+                <a class="nav__link" href="doctors.html">Врачи</a>
+                <a class="nav__link" href="services.html#clinics">Клиники</a>
+                <a class="nav__link" href="services.html#services">Услуги</a>
+                <a class="nav__link" href="index.html#how-it-works">О нас</a>
+                <a class="nav__link" href="doctors.html">Мои записи</a>
+            </nav>
+
+            <div class="header__actions">
+                <a class="search-link" href="doctors.html" aria-label="Поиск">⌕</a>
+                <a class="btn btn--outline" href="doctors.html">Войти</a>
+                <a class="btn btn--primary" href="doctors.html">Регистрация</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container hero__grid">
+                <div class="hero__content">
+                    <div class="badges">
+                        <span class="badge">Удобная запись</span>
+                        <span class="badge">Без звонков</span>
+                        <span class="badge">В любое время</span>
+                    </div>
+
+                    <h1>Запишитесь к стоматологу<br><span>быстро и без ожидания</span></h1>
+                    <p class="hero__text">
+                        Найдите подходящего врача, выберите удобное время<br class="desktop-only">
+                        и запишитесь онлайн. Забота о вашей улыбке — теперь проще.
+                    </p>
+
+                    <form class="search-box" id="homeSearch">
+                        <label class="search-field">
+                            <span class="search-field__icon">•</span>
+                            <input id="doctorSearch" type="text" placeholder="Врач или специальность" autocomplete="off">
+                        </label>
+
+                        <label class="search-field search-field--city">
+                            <span class="search-field__icon">•</span>
+                            <select id="citySelect">
+                                <option value="Алматы">Алматы</option>
+                                <option value="Астана">Астана</option>
+                            </select>
+                            <span class="chevron">⌵</span>
+                        </label>
+
+                        <button class="btn btn--primary search-button" type="submit">⌕&nbsp; Найти</button>
+                    </form>
+                </div>
+        </section>
+
+        <section class="how section" id="how-it-works">
+            <div class="container">
+                <div class="how__intro">
+                    <h2>Как это работает?</h2>
+                    <p>Всего 3 простых шага, чтобы попасть<br>к своему стоматологу.</p>
+                </div>
+
+                <div class="steps">
+                    <div class="step">
+                        <div class="step__top">
+                            <div class="step__icon">⌕</div>
+                            <span>1</span>
+                        </div>
+                        <h3>Найдите врача</h3>
+                        <p>Выберите специалиста<br>или укажите проблему.</p>
+                    </div>
+                    <div class="step__arrow">→</div>
+
+                    <div class="step">
+                        <div class="step__top">
+                            <div class="step__icon">◷</div>
+                            <span>2</span>
+                        </div>
+                        <h3>Выберите время</h3>
+                        <p>Узнайте расписание<br>и найдите удобный слот.</p>
+                    </div>
+                    <div class="step__arrow">→</div>
+
+                    <div class="step">
+                        <div class="step__top">
+                            <div class="step__icon">✓</div>
+                            <span>3</span>
+                        </div>
+                        <h3>Запишитесь</h3>
+                        <p>Подтвердите запись<br>и получите уведомление.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="doctors section">
+            <div class="container">
+                <div class="section-heading">
+                    <div>
+                        <h2>Популярные специалисты</h2>
+                    </div>
+                    <a class="view-all" href="doctors.html">Все врачи ﹥</a>
+                </div>
+
+                <div class="doctor-grid">
+                    <article class="doctor-card">
+                        <div class="doctor-card__photo doctor-photo doctor-photo--1">
+                            <span>АТ</span>
+                        </div>
+                        <button class="favorite" type="button" aria-label="Добавить в избранное">♡</button>
+                        <h3>Аружан Төлегенова</h3>
+                        <p class="doctor-card__specialty">Стоматолог-терапевт</p>
+                        <div class="rating">★ <b>4.9</b> <span>(120 отзывов)</span></div>
+                        <p class="experience">◉ Опыт 6 лет</p>
+                        <p class="price">от 5 000 ₸</p>
+                        <a class="btn btn--primary btn--full" href="doctors.html">Записаться</a>
+                    </article>
+
+                    <article class="doctor-card">
+                        <div class="doctor-card__photo doctor-photo doctor-photo--2">
+                            <span>АН</span>
+                        </div>
+                        <button class="favorite" type="button" aria-label="Добавить в избранное">♡</button>
+                        <h3>Азамат Нұрланов</h3>
+                        <p class="doctor-card__specialty">Стоматолог-ортопед</p>
+                        <div class="rating">★ <b>4.8</b> <span>(98 отзывов)</span></div>
+                        <p class="experience">◉ Опыт 8 лет</p>
+                        <p class="price">от 7 000 ₸</p>
+                        <a class="btn btn--primary btn--full" href="doctors.html">Записаться</a>
+                    </article>
+
+                    <article class="doctor-card">
+                        <div class="doctor-card__photo doctor-photo doctor-photo--3">
+                            <span>ДС</span>
+                        </div>
+                        <button class="favorite" type="button" aria-label="Добавить в избранное">♡</button>
+                        <h3>Динара Серікова</h3>
+                        <p class="doctor-card__specialty">Стоматолог-хирург</p>
+                        <div class="rating">★ <b>4.7</b> <span>(76 отзывов)</span></div>
+                        <p class="experience">◉ Опыт 5 лет</p>
+                        <p class="price">от 6 000 ₸</p>
+                        <a class="btn btn--primary btn--full" href="doctors.html">Записаться</a>
+                    </article>
+
+                    <article class="doctor-card">
+                        <div class="doctor-card__photo doctor-photo doctor-photo--4">
+                            <span>РП</span>
+                        </div>
+                        <button class="favorite" type="button" aria-label="Добавить в избранное">♡</button>
+                        <h3>Роман Павлов</h3>
+                        <p class="doctor-card__specialty">Стоматолог-ортодонт</p>
+                        <div class="rating">★ <b>4.9</b> <span>(112 отзывов)</span></div>
+                        <p class="experience">◉ Опыт 7 лет</p>
+                        <p class="price">от 8 000 ₸</p>
+                        <a class="btn btn--primary btn--full" href="doctors.html">Записаться</a>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="advantages">
+            <div class="container advantages__inner">
+                <div class="advantage advantage--main">
+                    <div>
+                        <h3>Более 50 клиник<br>и 200+ специалистов</h3>
+                        <p>Проверенные врачи и современные<br>клиники</p>
+                    </div>
+                </div>
+                <div class="advantage">
+                    <div class="advantage__icon">⌂</div>
+                    <p>Безопасная<br>оплата</p>
+                </div>
+                <div class="advantage">
+                    <div class="advantage__icon">◷</div>
+                    <p>Удобное<br>расписание</p>
+                </div>
+                <div class="advantage">
+                    <div class="advantage__icon">✉</div>
+                    <p>Напоминания<br>о записи</p>
+                </div>
+                <div class="advantage advantage--cta">
+                    <div>
+                        <h3>Ваша улыбка<br>в надежных руках</h3>
+                        <a class="btn btn--primary" href="doctors.html">Найти врача ﹥</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer__inner">
+            <div class="logo"><span class="logo__icon">♡</span><span>QLine</span></div>
+            <p>Платформа для онлайн-записи к стоматологу</p>
+            <p>© 2026 QLine</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
