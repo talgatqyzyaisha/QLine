@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация — QLine</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="header">
+    <div class="container header__inner">
+        <a class="logo" href="index.html">
+            <img class="logo__img" src="logotype.jpeg" alt="QLine">
+        </a>
+
+        <div class="header__actions auth-header-actions">
+            <a class="btn btn--outline" href="login.html">Войти</a>
+        </div>
+    </div>
+</header>
+
+<main>
+    <section class="auth-section">
+        <div class="auth-card">
+            <div class="auth-card__icon">✓</div>
+
+            <h1>Создать аккаунт</h1>
+            <p>Зарегистрируйтесь, чтобы записываться к стоматологам онлайн.</p>
+
+            <form id="registerForm" class="auth-form">
+                <label>
+                    <span>Имя</span>
+                    <input
+                        id="registerName"
+                        type="text"
+                        placeholder="Введите имя"
+                        required
+                    >
+                </label>
+
+                <label>
+                    <span>Email</span>
+                    <input
+                        id="registerEmail"
+                        type="email"
+                        placeholder="example@mail.com"
+                        required
+                    >
+                </label>
+
+                <label>
+                    <span>Пароль</span>
+                    <input
+                        id="registerPassword"
+                        type="password"
+                        placeholder="Введите пароль"
+                        minlength="6"
+                        required
+                    >
+                </label>
+
+                <p id="registerMessage" class="auth-message" aria-live="polite"></p>
+
+                <button class="btn btn--primary btn--full" type="submit">
+                    Зарегистрироваться
+                </button>
+            </form>
+
+            <p class="auth-footer">
+                Уже есть аккаунт?
+                <a href="login.html">Войти</a>
+            </p>
+        </div>
+    </section>
+</main>
+
+<script src="auth.js"></script>
+<script>
+    const registerForm = document.getElementById("registerForm");
+    const registerMessage = document.getElementById("registerMessage");
+
+    registerForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const name = document.getElementById("registerName").value;
+        const email = document.getElementById("registerEmail").value;
+        const password = document.getElementById("registerPassword").value;
+
+        const result = registerUser(name, email, password);
+
+        registerMessage.textContent = result.message || "";
+
+        if (result.success) {
+            window.location.href = "index.html";
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход — QLine</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="header">
+    <div class="container header__inner">
+        <a class="logo" href="index.html">
+            <img class="logo__img" src="logotype.jpeg" alt="QLine">
+        </a>
+        
+        <div class="header__actions auth-header-actions">
+            <a class="btn btn--primary " href="register.html">Регистрация</a>
+        </div>
+    </div>
+</header>
+
+<main>
+    <section class="auth-section">
+        <div class="auth-card">
+            <div class="auth-card__icon">→</div>
+
+            <h1>Войти в QLine</h1>
+            <p>Войдите в аккаунт, чтобы управлять своими записями.</p>
+
+            <form id="loginForm" class="auth-form">
+                <label>
+                    <span>Email</span>
+                    <input
+                        id="loginEmail"
+                        type="email"
+                        placeholder="example@mail.com"
+                        required
+                    >
+                </label>
+
+                <label>
+                    <span>Пароль</span>
+                    <input
+                        id="loginPassword"
+                        type="password"
+                        placeholder="Введите пароль"
+                        required
+                    >
+                </label>
+
+                <p id="loginMessage" class="auth-message" aria-live="polite"></p>
+
+                <button class="btn btn--primary btn--full" type="submit">
+                    Войти
+                </button>
+            </form>
+
+            <p class="auth-footer">
+                Нет аккаунта?
+                <a href="register.html">Зарегистрироваться</a>
+            </p>
+        </div>
+    </section>
+</main>
+
+<script src="auth.js"></script>
+<script>
+    const loginForm = document.getElementById("loginForm");
+    const loginMessage = document.getElementById("loginMessage");
+
+    loginForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const email = document.getElementById("loginEmail").value;
+        const password = document.getElementById("loginPassword").value;
+
+        const result = loginUser(email, password);
+
+        loginMessage.textContent = result.message || "";
+
+        if (result.success) {
+            window.location.href = "index.html";
+        }
+    });
+</script>
+
+</body>
+</html>
