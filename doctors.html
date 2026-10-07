@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QLine — Врачи</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="appointments.css">
 </head>
 <body>
         
@@ -19,7 +20,7 @@
             <a class="nav__link" href="services.html#clinics">Клиники</a>
             <a class="nav__link" href="services.html#services">Услуги</a>
             <a class="nav__link" href="index.html#how-it-works">О нас</a>
-            <a class="nav__link" href="doctors.html">Мои записи</a>
+            <a class="nav__link" href="appointments.html">Мои записи</a>
         </nav>
                 
         <div class="header__actions">
@@ -135,32 +136,43 @@
 
 <div class="modal" id="appointmentModal" aria-hidden="true">
     <div class="modal__overlay" data-close-modal></div>
-    <div class="modal__box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal__box" role="dialog" aria-modal="true" aria-label="Онлайн-запись">
         <button class="modal__close" type="button" data-close-modal aria-label="Закрыть">×</button>
-        <h2 id="modalTitle">Онлайн-запись</h2>
-        <p id="modalDoctor">Выберите удобное время для записи.</p>
-        <label class="modal__label">
-            Дата
-            <input type="date" id="appointmentDate">
-        </label>
 
-        <label class="modal__label">
-            Время
-            <select id="appointmentTime">
-                <option>09:00</option>
-                <option>10:30</option>
-                <option>12:00</option>
-                <option>15:30</option>
-                <option>17:00</option>
-            </select>
-        </label>
-        
-        <button class="btn btn--primary btn--full" id="confirmAppointment" type="button">Подтвердить</button>
+        <div id="appointmentForm">
+            <h2 id="modalTitle">Онлайн-запись</h2>
+            <p id="modalDoctor">Выберите удобное время для записи.</p>
+            <label class="modal__label">
+                Дата
+                <input type="date" id="appointmentDate">
+            </label>
+            <label class="modal__label">
+                Время
+                <select id="appointmentTime">
+                    <option>09:00</option>
+                    <option>10:30</option>
+                    <option>12:00</option>
+                    <option>15:30</option>
+                    <option>17:00</option>
+                </select>
+            </label>
+            <p class="modal__error" id="appointmentError" role="alert" hidden></p>
+            <button class="btn btn--primary btn--full modal__submit" id="confirmAppointment" type="button">Подтвердить</button>
+        </div>
+
+        <div id="appointmentSuccess" hidden>
+            <div class="modal__icon">✓</div>
+            <h2>Вы записаны</h2>
+            <p id="appointmentSummary"></p>
+            <a class="btn btn--primary btn--full" href="appointments.html">Открыть мои записи</a>
+            <button class="btn btn--outline btn--full modal__submit" type="button" data-close-modal>Закрыть</button>
+        </div>
     </div>
 </div>
 
 <script src="auth.js"></script>
 <script src="script.js"></script>
+<script src="appointments.js"></script>
         
 </body>
 </html>

@@ -1,0 +1,231 @@
+/* ===== Мои записи ===== */
+
+.appt-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+}
+
+.appt-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.appt-tabs__tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--white);
+    color: #233c5e;
+    font-size: 14px;
+    font-weight: 700;
+    transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.appt-tabs__tab:hover {
+    border-color: #b9d3ee;
+}
+
+.appt-tabs__tab.is-active {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: var(--white);
+}
+
+.appt-tabs__tab:focus-visible {
+    outline: 3px solid rgba(25, 118, 237, 0.35);
+    outline-offset: 2px;
+}
+
+.appt-tabs__count {
+    min-width: 24px;
+    padding: 1px 7px;
+    border-radius: 10px;
+    background: var(--blue-soft);
+    color: var(--blue);
+    font-size: 12px;
+    text-align: center;
+}
+
+.appt-tabs__tab.is-active .appt-tabs__count {
+    background: rgba(255, 255, 255, 0.22);
+    color: var(--white);
+}
+
+.appt-list {
+    display: grid;
+    gap: 14px;
+}
+
+.appt-card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 20px;
+    padding: 18px 20px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: var(--white);
+}
+
+.appt-card--upcoming {
+    border-left: 4px solid var(--blue);
+}
+
+.appt-card--past,
+.appt-card--cancelled {
+    background: #fafcfe;
+}
+
+.appt-card--cancelled h3,
+.appt-card--cancelled .appt-card__meta {
+    text-decoration: line-through;
+    text-decoration-color: #a9b8c8;
+}
+
+.appt-card__date {
+    width: 68px;
+    height: 68px;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    border-radius: 16px;
+    background: var(--blue-soft);
+    color: var(--blue);
+}
+
+.appt-card--past .appt-card__date,
+.appt-card--cancelled .appt-card__date {
+    background: #eef2f6;
+    color: #7a8ca0;
+}
+
+.appt-card__day {
+    display: block;
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.appt-card__month {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 3px;
+}
+
+.appt-card__main h3 {
+    font-size: 18px;
+}
+
+.appt-card__specialty {
+    color: #7890a8;
+    font-size: 13px;
+    margin-top: 1px;
+}
+
+.appt-card__meta {
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+.appt-card__price {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 2px;
+}
+
+.appt-card__price:empty {
+    display: none;
+}
+
+.appt-card__side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.status {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.status--upcoming {
+    background: var(--blue-soft);
+    color: var(--blue);
+}
+
+.status--past {
+    background: #e8f6ee;
+    color: #1f7a4a;
+}
+
+.status--cancelled {
+    background: #fdecee;
+    color: #a82833;
+}
+
+.btn--small {
+    padding: 9px 16px;
+    font-size: 13px;
+    border-radius: 12px;
+}
+
+.appt-card .btn--outline:hover {
+    border-color: #e5a0a7;
+    color: #a82833;
+}
+
+.appt-empty__action {
+    margin-top: 18px;
+}
+
+.modal__error {
+    color: #c62f3d;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 12px;
+}
+
+.modal__submit {
+    margin-top: 16px;
+}
+
+#appointmentSuccess .btn {
+    margin-top: 10px;
+}
+
+#appointmentSuccess > p {
+    margin-bottom: 16px;
+}
+
+@media (max-width: 760px) {
+    .appt-toolbar .btn {
+        width: 100%;
+    }
+
+    .appt-card {
+        grid-template-columns: auto 1fr;
+        gap: 14px 16px;
+        padding: 16px;
+    }
+
+    .appt-card__side {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}

@@ -108,19 +108,33 @@ document.addEventListener("DOMContentLoaded", () => {
         applyFilters();
     }
 
-    const modal = document.getElementById("appointmentModal");
+        const modal = document.getElementById("appointmentModal");
 
     if (modal) {
         const modalDoctor = document.getElementById("modalDoctor");
         const dateInput = document.getElementById("appointmentDate");
+        const timeSelect = document.getElementById("appointmentTime");
         const confirmButton = document.getElementById("confirmAppointment");
+        const form = document.getElementById("appointmentForm");
+        const success = document.getElementById("appointmentSuccess");
+        const summary = document.getElementById("appointmentSummary");
+        const errorBox = document.getElementById("appointmentError");
+        let selectedCard = null;
+
+        const showError = (message) => {
+            errorBox.textContent = message;
+            errorBox.hidden = !message;
+        };
 
         document.querySelectorAll(".appointment-btn").forEach((button) => {
             button.addEventListener("click", () => {
-                const card = button.closest(".doctor-card");
-                const doctorName = card.querySelector("h3").textContent;
+                selectedCard = button.closest(".doctor-card");
+                const doctorName = selectedCard.querySelector("h3").textContent;
 
                 modalDoctor.textContent = `Выберите удобное время для записи к врачу: ${doctorName}.`;
+                form.hidden = false;
+                success.hidden = true;
+                showError("");
                 modal.classList.add("is-open");
                 modal.setAttribute("aria-hidden", "false");
 
@@ -130,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     .split("T")[0];
 
                 dateInput.min = localDate;
-                if (!dateInput.value) {
+                if (!dateInput.value || dateInput.value < localDate) {
                     dateInput.value = localDate;
                 }
             });
@@ -151,17 +165,37 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
+        [dateInput, timeSelect].forEach((field) => {
+            field.addEventListener("change", () => showError(""));
+        });
+
         confirmButton.addEventListener("click", () => {
             const date = dateInput.value;
-            const time = document.getElementById("appointmentTime").value;
+            const time = timeSelect.value;
 
             if (!date) {
-                alert("Пожалуйста, выберите дату.");
+                showError("Выберите дату.");
                 return;
             }
 
-            alert(`Запись подтверждена!`);
-            closeModal();
+            const result = window.QLineAppointments.add({
+                doctor: selectedCard.dataset.name,
+                specialty: selectedCard.dataset.specialty,
+                city: selectedCard.dataset.city,
+                price: selectedCard.querySelector(".price").textContent.trim(),
+                date,
+                time
+            });
+
+            if (!result.ok) {
+                showError(result.error);
+                return;
+            }
+
+            summary.textContent =
+                `${result.item.doctor}, ${window.QLineAppointments.formatDate(result.item)}, ${time}.`;
+            form.hidden = true;
+            success.hidden = false;
         });
     }
 });
