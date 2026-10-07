@@ -172,6 +172,12 @@ document.addEventListener("DOMContentLoaded", () => {
         confirmButton.addEventListener("click", () => {
             const date = dateInput.value;
             const time = timeSelect.value;
+            const currentUser = getCurrentUser();
+            
+            if (!currentUser) {
+                showError("Войдите в аккаунт, чтобы записаться.");
+                return;
+            }
 
             if (!date) {
                 showError("Выберите дату.");
