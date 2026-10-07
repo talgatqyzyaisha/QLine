@@ -7,10 +7,13 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+        
 <header class="header">
     <div class="container header__inner">
         <a class="logo" href="index.html">
-            <span class="logo__icon">♡</span><span>QLine</span></a>
+            <img class="logo__img" src="logotype.jpeg" alt="QLine">
+        </a>
+        
         <nav class="nav" aria-label="Навигация">
             <a class="nav__link active" href="doctors.html">Врачи</a>
             <a class="nav__link" href="services.html#clinics">Клиники</a>
@@ -18,26 +21,32 @@
             <a class="nav__link" href="index.html#how-it-works">О нас</a>
             <a class="nav__link" href="doctors.html">Мои записи</a>
         </nav>
+                
         <div class="header__actions">
-            <a class="search-link" href="#doctor-list">⌕</a>
-            <a class="btn btn--outline" href="doctors.html">Войти</a>
-            <a class="btn btn--primary" href="doctors.html">Регистрация</a>
+            <a class="search-link" href="doctors.html" aria-label="Поиск">⌕</a>
+                
+            <div id="authActions" class="header__auth">
+                <a class="btn btn--outline" href="login.html">Войти</a>
+                <a class="btn btn--primary" href="register.html">Регистрация</a>
+            </div>
         </div>
     </div>
 </header>
-
+        
+        
 <main>
     <section class="page-hero">
         <div class="container">
             <p class="eyebrow">QLine / Врачи</p>
             <h1>Найдите своего стоматолога</h1>
             <p>Выберите специалиста и подходящее время для онлайн-записи.</p>
-
+                    
             <div class="filter-panel">
                 <label>
                     <span>Врач или специальность</span>
                     <input id="filterInput" type="text" placeholder="Например, ортодонт">
                 </label>
+                        
                 <label>
                     <span>Город</span>
                     <select id="filterCity">
@@ -46,18 +55,19 @@
                         <option value="Астана">Астана</option>
                     </select>
                 </label>
+                
                 <button class="btn btn--primary" id="filterButton" type="button">Найти</button>
             </div>
         </div>
     </section>
-
+            
     <section class="section" id="doctor-list">
         <div class="container">
             <div class="section-heading">
                 <h2>Специалисты</h2>
                 <span id="doctorCount" class="result-count">4 врача</span>
             </div>
-
+                    
             <div class="doctor-grid doctor-grid--page" id="doctorGrid">
                 <article class="doctor-card" data-name="Аружан Төлегенова" data-specialty="Стоматолог-терапевт" data-city="Алматы">
                     <div class="doctor-card__photo doctor-photo doctor-photo--1"><img src="data:image/jpeg;base64,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" alt="Аружан Төлегенова"></div>
@@ -66,10 +76,10 @@
                     <p class="doctor-card__specialty">Стоматолог-терапевт</p>
                     <div class="rating">★ <b>4.9</b> <span>(120 отзывов)</span></div>
                     <p class="experience">◉ Опыт 6 лет</p>
-                    <p class="price">от 5 000 ₸</p>
-                    <button class="btn btn--primary btn--full appointment-btn" type="button">Записаться</button>
+                        <p class="price">от 5 000 ₸</p>
+                <button class="btn btn--primary btn--full appointment-btn" type="button">Записаться</button>
                 </article>
-
+                        
                 <article class="doctor-card" data-name="Азамат Нұрланов" data-specialty="Стоматолог-ортопед" data-city="Алматы">
                     <div class="doctor-card__photo doctor-photo doctor-photo--2"><span>АН</span></div>
                     <button class="favorite" type="button" aria-label="Добавить в избранное">♡</button>
@@ -103,23 +113,25 @@
                     <button class="btn btn--primary btn--full appointment-btn" type="button">Записаться</button>
                 </article>
             </div>
-
-            <div class="empty-state" id="emptyState" hidden>
-                <div class="empty-state__icon">⌕</div>
-                <h3>Ничего не найдено</h3>
-                <p>Попробуйте изменить запрос или выбрать другую специальность.</p>
-            </div>
         </div>
-    </section>
+        
+        <div class="empty-state" id="emptyState" hidden>
+            <div class="empty-state__icon">⌕</div>
+            <h3>Ничего не найдено</h3>
+            <p>Попробуйте изменить запрос или выбрать другую специальность.</p>
+        </div>
+    </div>
+</section>
 </main>
 
 <footer class="footer">
     <div class="container footer__inner">
-        <div class="logo"><span class="logo__icon">♡</span><span>QLine</span></div>
+        <img class="logo__img" src="logotype.jpeg" alt="QLine">
         <p>Платформа для онлайн-записи к стоматологу</p>
         <p>© 2026 QLine</p>
     </div>
 </footer>
+
 
 <div class="modal" id="appointmentModal" aria-hidden="true">
     <div class="modal__overlay" data-close-modal></div>
@@ -131,6 +143,7 @@
             Дата
             <input type="date" id="appointmentDate">
         </label>
+
         <label class="modal__label">
             Время
             <select id="appointmentTime">
@@ -141,10 +154,13 @@
                 <option>17:00</option>
             </select>
         </label>
+        
         <button class="btn btn--primary btn--full" id="confirmAppointment" type="button">Подтвердить</button>
     </div>
 </div>
 
+<script src="auth.js"></script>
 <script src="script.js"></script>
+        
 </body>
 </html>

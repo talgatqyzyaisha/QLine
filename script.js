@@ -1,4 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
+        const authActions = document.getElementById("authActions");
+        
+        if (authActions) {
+            const currentUser = getCurrentUser();
+            
+            if (currentUser) {
+                authActions.innerHTML = `
+                <span class="auth-user">${currentUser.name}</span>
+                <button class="btn btn--outline" id="logoutButton" type="button">
+                    Выйти
+                </button>
+            `;
+
+            document.getElementById("logoutButton").addEventListener("click", () => {
+                logoutUser();
+                window.location.reload();
+            });
+        }
+    }
     document.querySelectorAll(".favorite").forEach((button) => {
         button.addEventListener("click", () => {
             button.classList.toggle("is-favorite");
@@ -29,7 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Фильтрация врачей
     const filterInput = document.getElementById("filterInput");
     const filterCity = document.getElementById("filterCity");
     const filterButton = document.getElementById("filterButton");
