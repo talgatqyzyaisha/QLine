@@ -1002,3 +1002,472 @@ button {
         align-items: flex-start;
     }
 }
+
+/* ===== Регистрация и вход ===== */
+
+.auth {
+    min-height: calc(100vh - 72px - 73px);
+    padding: 48px 0 64px;
+    display: grid;
+    place-items: start center;
+    background: linear-gradient(105deg, #f5fbff, #eaf6ff);
+}
+
+.auth__card {
+    width: min(460px, calc(100% - 28px));
+    background: var(--white);
+    border-radius: 22px;
+    padding: 34px;
+    box-shadow: var(--shadow);
+}
+
+.auth__card h1 {
+    font-size: 28px;
+    letter-spacing: -0.8px;
+    line-height: 1.15;
+}
+
+.auth__lead {
+    color: var(--muted);
+    margin: 8px 0 22px;
+    font-size: 14px;
+}
+
+.auth__switch {
+    margin-top: 20px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.auth__switch a {
+    color: var(--blue);
+    font-weight: 700;
+}
+
+.auth__switch a:hover {
+    text-decoration: underline;
+}
+
+.field {
+    margin-bottom: 14px;
+}
+
+.field__label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.field__optional {
+    color: var(--muted);
+    font-weight: 400;
+}
+
+.field input[type="text"],
+.field input[type="email"],
+.field input[type="tel"],
+.field input[type="password"] {
+    display: block;
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    color: var(--text);
+    background: var(--white);
+    outline: none;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.field input::placeholder {
+    color: #9aaabb;
+}
+
+.field input:focus-visible {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(25, 118, 237, 0.18);
+}
+
+.field__control {
+    position: relative;
+}
+
+.field__control input {
+    padding-right: 92px;
+}
+
+.field__toggle {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    border: 0;
+    background: transparent;
+    color: var(--blue);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 8px;
+    border-radius: 8px;
+}
+
+.field__toggle:hover {
+    background: var(--blue-soft);
+}
+
+.field__toggle:focus-visible,
+.check input:focus-visible,
+.btn:focus-visible {
+    outline: 3px solid rgba(25, 118, 237, 0.35);
+    outline-offset: 2px;
+}
+
+.field__hint {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.field__error {
+    color: #c62f3d;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 5px;
+}
+
+.field--invalid input[type="text"],
+.field--invalid input[type="email"],
+.field--invalid input[type="tel"],
+.field--invalid input[type="password"] {
+    border-color: #e5656f;
+}
+
+.field--check {
+    margin-bottom: 10px;
+}
+
+.check {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text);
+    cursor: pointer;
+}
+
+.check input {
+    width: 18px;
+    height: 18px;
+    margin-top: 1px;
+    flex-shrink: 0;
+    accent-color: var(--blue);
+}
+
+.form-alert {
+    background: #fdecee;
+    color: #a82833;
+    border: 1px solid #f5c4c9;
+    border-radius: 12px;
+    padding: 11px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.auth form .btn--full {
+    margin-top: 8px;
+}
+
+.btn:disabled {
+    opacity: 0.65;
+    cursor: wait;
+    transform: none;
+}
+
+/* Пользователь в шапке после входа */
+
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-menu__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--blue-soft);
+    color: var(--blue);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.user-menu__name {
+    font-size: 14px;
+    font-weight: 700;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+    /* Кнопка «Войти» раньше пряталась на телефоне — возвращаем её */
+    .header__actions .btn--outline {
+        display: inline-flex;
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+
+    .header__actions .btn--primary {
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+
+    .user-menu__name {
+        display: none;
+    }
+
+    .auth {
+        padding: 28px 0 40px;
+    }
+
+    .auth__card {
+        padding: 24px 20px;
+    }
+}
+
+
+/* ===== Мои записи ===== */
+
+.appt-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+}
+
+.appt-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.appt-tabs__tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--white);
+    color: #233c5e;
+    font-size: 14px;
+    font-weight: 700;
+    transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.appt-tabs__tab:hover {
+    border-color: #b9d3ee;
+}
+
+.appt-tabs__tab.is-active {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: var(--white);
+}
+
+.appt-tabs__tab:focus-visible {
+    outline: 3px solid rgba(25, 118, 237, 0.35);
+    outline-offset: 2px;
+}
+
+.appt-tabs__count {
+    min-width: 24px;
+    padding: 1px 7px;
+    border-radius: 10px;
+    background: var(--blue-soft);
+    color: var(--blue);
+    font-size: 12px;
+    text-align: center;
+}
+
+.appt-tabs__tab.is-active .appt-tabs__count {
+    background: rgba(255, 255, 255, 0.22);
+    color: var(--white);
+}
+
+.appt-list {
+    display: grid;
+    gap: 14px;
+}
+
+.appt-card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 20px;
+    padding: 18px 20px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: var(--white);
+}
+
+.appt-card--upcoming {
+    border-left: 4px solid var(--blue);
+}
+
+.appt-card--past,
+.appt-card--cancelled {
+    background: #fafcfe;
+}
+
+.appt-card--cancelled h3,
+.appt-card--cancelled .appt-card__meta {
+    text-decoration: line-through;
+    text-decoration-color: #a9b8c8;
+}
+
+.appt-card__date {
+    width: 68px;
+    height: 68px;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    border-radius: 16px;
+    background: var(--blue-soft);
+    color: var(--blue);
+}
+
+.appt-card--past .appt-card__date,
+.appt-card--cancelled .appt-card__date {
+    background: #eef2f6;
+    color: #7a8ca0;
+}
+
+.appt-card__day {
+    display: block;
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.appt-card__month {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 3px;
+}
+
+.appt-card__main h3 {
+    font-size: 18px;
+}
+
+.appt-card__specialty {
+    color: #7890a8;
+    font-size: 13px;
+    margin-top: 1px;
+}
+
+.appt-card__meta {
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+.appt-card__price {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 2px;
+}
+
+.appt-card__price:empty {
+    display: none;
+}
+
+.appt-card__side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.status {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.status--upcoming {
+    background: var(--blue-soft);
+    color: var(--blue);
+}
+
+.status--past {
+    background: #e8f6ee;
+    color: #1f7a4a;
+}
+
+.status--cancelled {
+    background: #fdecee;
+    color: #a82833;
+}
+
+.btn--small {
+    padding: 9px 16px;
+    font-size: 13px;
+    border-radius: 12px;
+}
+
+.appt-card .btn--outline:hover {
+    border-color: #e5a0a7;
+    color: #a82833;
+}
+
+.appt-empty__action {
+    margin-top: 18px;
+}
+
+.modal__error {
+    color: #c62f3d;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 12px;
+}
+
+.modal__submit {
+    margin-top: 16px;
+}
+
+#appointmentSuccess .btn {
+    margin-top: 10px;
+}
+
+#appointmentSuccess > p {
+    margin-bottom: 16px;
+}
+
+@media (max-width: 760px) {
+    .appt-toolbar .btn {
+        width: 100%;
+    }
+
+    .appt-card {
+        grid-template-columns: auto 1fr;
+        gap: 14px 16px;
+        padding: 16px;
+    }
+
+    .appt-card__side {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
