@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QLine — Избранное</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="appointments.css">
+</head>
+<body>
+<header class="header">
+    <div class="container header__inner">
+        <a class="logo" href="index.html" aria-label="Главная">
+            <img class="logo__img" src="logotype.jpeg" alt="QLine">
+        </a>
+        <nav class="nav" aria-label="Навигация">
+            <a class="nav__link" href="doctors.html">Врачи</a>
+            <a class="nav__link" href="services.html#clinics">Клиники</a>
+            <a class="nav__link" href="services.html#services">Услуги</a>
+            <a class="nav__link" href="index.html#how-it-works">О нас</a>
+            <a class="nav__link" href="appointments.html">Мои записи</a>
+            <a class="nav__link active" href="favorites.html">Избранное</a>
+        </nav>
+        <div class="header__actions">
+            <div id="authActions" class="header__auth">
+                <a class="btn btn--outline" href="login.html">Войти</a>
+                <a class="btn btn--primary" href="register.html">Регистрация</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main>
+    <section class="page-hero page-hero--compact">
+        <div class="container">
+            <p class="eyebrow">QLine / Избранное</p>
+            <h1>Избранное</h1>
+            <p>Стоматологи, которых вы сохранили, чтобы быстро вернуться к ним позже.</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Мои стоматологи</h2>
+                <span id="favoriteCount" class="result-count" hidden></span>
+            </div>
+
+            <div class="fav-state" id="favoriteLoading" role="status">
+                <div class="fav-spinner" aria-hidden="true"></div>
+                <p>Загружаем избранное…</p>
+            </div>
+
+            <div class="empty-state" id="favoriteError" role="alert" hidden>
+                <div class="empty-state__icon">!</div>
+                <h3>Не удалось загрузить избранное</h3>
+                <p>Проверьте, что браузер разрешает хранилище, и попробуйте ещё раз.</p>
+                <button class="btn btn--primary appt-empty__action" id="favoriteRetry" type="button">Повторить</button>
+            </div>
+
+            <div class="empty-state" id="favoriteEmpty" hidden>
+                <div class="empty-state__icon">♡</div>
+                <h3>У вас пока нет избранных стоматологов</h3>
+                <p>Нажмите на сердце на карточке врача, чтобы сохранить его здесь.</p>
+                <a class="btn btn--primary appt-empty__action" href="doctors.html">Найти врача</a>
+            </div>
+
+            <div class="empty-state" id="favoriteGuest" hidden>
+                <div class="empty-state__icon">♡</div>
+                <h3>Войдите, чтобы увидеть избранное</h3>
+                <p>Избранные стоматологи сохраняются в вашем аккаунте.</p>
+                <div class="fav-guest__actions">
+                    <a class="btn btn--primary" href="login.html" data-fav-login>Войти</a>
+                    <a class="btn btn--outline" href="register.html" data-fav-register>Регистрация</a>
+                </div>
+            </div>
+
+            <div class="doctor-grid doctor-grid--page" id="favoriteGrid" aria-live="polite" hidden></div>
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <div class="container footer__inner">
+        <div class="logo"><span class="logo__icon">♡</span><span>QLine</span></div>
+        <p>Платформа для онлайн-записи к стоматологу</p>
+        <p>© 2026 QLine</p>
+    </div>
+</footer>
+
+<script src="auth.js"></script>
+<script src="favorites.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
