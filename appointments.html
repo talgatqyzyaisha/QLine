@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QLine — Мои записи</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="appointments.css">
 </head>
 <body>
 <header class="header">
     <div class="container header__inner">
-        <a class="logo" href="index.html" aria-label="Главная"><span class="logo__icon">♡</span><span>QLine</span></a>
+        <a class="logo" href="index.html" aria-label="Главная">
+            <img class="logo__img" src="logotype.jpeg" alt="QLine">
+        </a>
         <nav class="nav" aria-label="Навигация">
             <a class="nav__link" href="doctors.html">Врачи</a>
             <a class="nav__link" href="services.html#clinics">Клиники</a>
@@ -18,8 +21,10 @@
             <a class="nav__link active" href="appointments.html">Мои записи</a>
         </nav>
         <div class="header__actions">
-            <a class="btn btn--outline" href="login.html" data-auth="login">Войти</a>
-            <a class="btn btn--primary" href="register.html" data-auth="register">Регистрация</a>
+            <div id="authActions" class="header__auth">
+                <a class="btn btn--outline" href="login.html">Войти</a>
+                <a class="btn btn--primary" href="register.html">Регистрация</a>
+            </div>
         </div>
     </div>
 </header>
@@ -71,6 +76,7 @@
 </footer>
 
 <script src="auth.js"></script>
+<script src="script.js"></script>
 <script src="appointments.js"></script>
 </body>
 </html>

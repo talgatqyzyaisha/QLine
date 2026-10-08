@@ -1,4 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
+        const authActions = document.getElementById("authActions");
+        
+        if (authActions) {
+            const currentUser = getCurrentUser();
+            
+            if (currentUser) {
+                authActions.innerHTML = `
+                <span class="auth-user">${currentUser.name}</span>
+                <button class="btn btn--outline" id="logoutButton" type="button">
+                    Выйти
+                </button>
+            `;
+
+            document.getElementById("logoutButton").addEventListener("click", () => {
+                logoutUser();
+                window.location.reload();
+            });
+        }
+    }
     document.querySelectorAll(".favorite").forEach((button) => {
         button.addEventListener("click", () => {
             button.classList.toggle("is-favorite");
@@ -29,7 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Фильтрация врачей
     const filterInput = document.getElementById("filterInput");
     const filterCity = document.getElementById("filterCity");
     const filterButton = document.getElementById("filterButton");
@@ -90,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
         applyFilters();
     }
 
-    const modal = document.getElementById("appointmentModal");
+        const modal = document.getElementById("appointmentModal");
 
     if (modal) {
         const modalDoctor = document.getElementById("modalDoctor");
@@ -154,6 +172,12 @@ document.addEventListener("DOMContentLoaded", () => {
         confirmButton.addEventListener("click", () => {
             const date = dateInput.value;
             const time = timeSelect.value;
+            const currentUser = getCurrentUser();
+            
+            if (!currentUser) {
+                showError("Войдите в аккаунт, чтобы записаться.");
+                return;
+            }
 
             if (!date) {
                 showError("Выберите дату.");

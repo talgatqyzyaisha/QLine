@@ -7,9 +7,13 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
 <header class="header">
     <div class="container header__inner">
-        <a class="logo" href="index.html"><span class="logo__icon">♡</span><span>QLine</span></a>
+        <a class="logo" href="index.html">
+            <img class="logo__img" src="logotype.jpeg" alt="QLine">
+        </a>
+
         <nav class="nav" aria-label="Навигация">
             <a class="nav__link" href="doctors.html">Врачи</a>
             <a class="nav__link active" href="services.html#clinics">Клиники</a>
@@ -17,10 +21,14 @@
             <a class="nav__link" href="index.html#how-it-works">О нас</a>
             <a class="nav__link" href="appointments.html">Мои записи</a>
         </nav>
+
         <div class="header__actions">
-            <a class="search-link" href="doctors.html">⌕</a>
-            <a class="btn btn--outline" href="login.html" data-auth="login">Войти</a>
-            <a class="btn btn--primary" href="register.html" data-auth="register">Регистрация</a>
+            <a class="search-link" href="doctors.html" aria-label="Поиск">⌕</a>
+            
+            <div id="authActions" class="header__auth">
+                <a class="btn btn--outline" href="login.html">Войти</a>
+                <a class="btn btn--primary" href="register.html">Регистрация</a>
+            </div>
         </div>
     </div>
 </header>
@@ -145,12 +153,14 @@
 
 <footer class="footer">
     <div class="container footer__inner">
-        <div class="logo"><span class="logo__icon">♡</span><span>QLine</span></div>
+        <img class="logo__img" src="logotype.jpeg" alt="QLine">
         <p>Платформа для онлайн-записи к стоматологу</p>
         <p>© 2026 QLine</p>
     </div>
 </footer>
+
 <script src="auth.js"></script>
 <script src="script.js"></script>
+
 </body>
 </html>

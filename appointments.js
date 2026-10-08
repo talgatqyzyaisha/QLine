@@ -8,7 +8,8 @@
 (() => {
     "use strict";
 
-    const KEY = "qline_appointments";
+    const currentUser = getCurrentUser();
+    const KEY = currentUser ? `appointments_${currentUser.id}` : null;
 
     /* ---------- хранилище ---------- */
 

@@ -3,72 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QLine — Вход</title>
+    <title>Вход — QLine</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
 <header class="header">
     <div class="container header__inner">
-        <a class="logo" href="index.html" aria-label="Главная"><span class="logo__icon">♡</span><span>QLine</span></a>
-        <nav class="nav" aria-label="Навигация">
-            <a class="nav__link" href="doctors.html">Врачи</a>
-            <a class="nav__link" href="services.html#clinics">Клиники</a>
-            <a class="nav__link" href="services.html#services">Услуги</a>
-            <a class="nav__link" href="index.html#how-it-works">О нас</a>
-            <a class="nav__link" href="appointments.html">Мои записи</a>
-        </nav>
-        <div class="header__actions">
-            <a class="btn btn--outline" href="login.html" data-auth="login">Войти</a>
-            <a class="btn btn--primary" href="register.html" data-auth="register">Регистрация</a>
+        <a class="logo" href="index.html">
+            <img class="logo__img" src="logotype.jpeg" alt="QLine">
+        </a>
+        
+        <div class="header__actions auth-header-actions">
+            <a class="btn btn--primary " href="register.html">Регистрация</a>
         </div>
     </div>
 </header>
 
-<main class="auth">
-    <div class="auth__card">
-        <h1>Вход в QLine</h1>
-        <p class="auth__lead">Войдите, чтобы записаться к врачу и посмотреть свои визиты.</p>
+<main>
+    <section class="auth-section">
+        <div class="auth-card">
+            <div class="auth-card__icon">→</div>
 
-        <form id="loginForm" novalidate>
-            <div class="form-alert" role="alert" hidden></div>
+            <h1>Войти в QLine</h1>
+            <p>Войдите в аккаунт, чтобы управлять своими записями.</p>
 
-            <div class="field">
-                <label class="field__label" for="loginEmail">Email</label>
-                <input id="loginEmail" name="email" type="email" autocomplete="email" placeholder="name@example.com" required>
-                <p class="field__error" hidden></p>
-            </div>
-
-            <div class="field">
-                <label class="field__label" for="loginPassword">Пароль</label>
-                <div class="field__control">
-                    <input id="loginPassword" name="password" type="password" autocomplete="current-password" required>
-                    <button class="field__toggle" type="button" data-toggle-password aria-pressed="false">Показать</button>
-                </div>
-                <p class="field__error" hidden></p>
-            </div>
-
-            <div class="field field--check">
-                <label class="check">
-                    <input name="remember" type="checkbox" checked>
-                    <span>Оставаться в аккаунте на этом устройстве</span>
+            <form id="loginForm" class="auth-form">
+                <label>
+                    <span>Email</span>
+                    <input
+                        id="loginEmail"
+                        type="email"
+                        placeholder="example@mail.com"
+                        required
+                    >
                 </label>
-            </div>
 
-            <button class="btn btn--primary btn--full" type="submit">Войти</button>
-        </form>
+                <label>
+                    <span>Пароль</span>
+                    <input
+                        id="loginPassword"
+                        type="password"
+                        placeholder="Введите пароль"
+                        required
+                    >
+                </label>
 
-        <p class="auth__switch">Нет аккаунта? <a href="register.html" data-keep-next>Зарегистрироваться</a></p>
-    </div>
+                <p id="loginMessage" class="auth-message" aria-live="polite"></p>
+
+                <button class="btn btn--primary btn--full" type="submit">
+                    Войти
+                </button>
+            </form>
+
+            <p class="auth-footer">
+                Нет аккаунта?
+                <a href="register.html">Зарегистрироваться</a>
+            </p>
+        </div>
+    </section>
 </main>
 
-<footer class="footer">
-    <div class="container footer__inner">
-        <div class="logo"><span class="logo__icon">♡</span><span>QLine</span></div>
-        <p>Платформа для онлайн-записи к стоматологу</p>
-        <p>© 2026 QLine</p>
-    </div>
-</footer>
-
 <script src="auth.js"></script>
+<script>
+    const loginForm = document.getElementById("loginForm");
+    const loginMessage = document.getElementById("loginMessage");
+
+    loginForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const email = document.getElementById("loginEmail").value;
+        const password = document.getElementById("loginPassword").value;
+
+        const result = loginUser(email, password);
+
+        loginMessage.textContent = result.message || "";
+
+        if (result.success) {
+            window.location.href = "index.html";
+        }
+    });
+</script>
+
 </body>
 </html>
