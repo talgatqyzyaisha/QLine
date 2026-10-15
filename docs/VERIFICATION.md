@@ -1,19 +1,18 @@
-# Проверки версии 0.2.0
+# Проверки — 15 октября 2026
 
-| Проверка | Фактический результат |
+| Проверка | Результат |
 |---|---|
-| npm run check | Синтаксис исходников и HTML прошёл |
-| npm test | 19/19 модульных и render-тестов прошли |
-| npm run build | Проверки production-исходников прошли; статическое демо не генерируется |
-| Auth-service | Валидация, отсутствие повышения ролей, consent, generic login error, recovery signature/expiry/session binding, refresh concurrency проверены на mock boundary |
-| Supabase HTTP adapter | Проверены apikey-only для publishable key, пользовательский JWT, ошибки без утечки provider messages и schema-missing |
-| Frontend | RU/KZ auth-формы, каталог, роли кабинетов, подписи адаптивных таблиц, меню/клавиатура в EventTarget stubs |
-| Express HTTP integration | Тесты подготовлены; не выполнены из-за npm registry 403 |
-| PostgreSQL | CI job и SQL/RLS/race-тесты подготовлены; здесь не выполнены |
-| Реальный Supabase/Auth/SMTP | Не проверены: сеть 403, нет управленческой сессии |
-| GitHub/Railway | Нет push/deploy, не утверждается успех |
-| Браузер/реальные устройства | Не проверены; viewport и доступность требуют настоящего browser QA |
+| npm install | Успешно; package-lock.json создан; npm audit: 0 уязвимостей |
+| npm run check | 31 JS-модуль и HTML entry checks прошли |
+| npm test | 19/19 |
+| npm run test:http | 6/6, реальный Express HTTP с подменой Supabase boundary |
+| npm run build | Пройдено, в том числе на Windows после исправления file URL |
+| PostgreSQL 17 | Обе миграции применены к изолированной базе; RLS, lifecycle, idempotency, consent version, запрет metadata role escalation и blocked-user access прошли; фикстуры RLS откатились |
+| Конкурентная запись | Два отдельных подключения: один commit, один CONFLICT, одна активная запись |
+| Целевой Supabase | Схема проверена до изменений, dry-run и обе миграции прошли; doctor подтвердил Auth и qline_api |
+| GitHub | История изучена; изменения загружены в launch/express-supabase без force push |
+| Railway HTTPS | https://qline-production.up.railway.app: /, /api/health, /api/ready, /api/services, /api/clinics — 200; readiness storage=supabase |
 
-Старые тесты фиктивного хранилища вынесены из runtime и больше не объявляются проверкой надёжности production-бронирования. Тестовые фикстуры используются только в изолированных render-тестах и исключены из Docker.
+Исправлены Windows-путь в build и HTTP cookie jar: повторный Set-Cookie заменяет прежнюю cookie, как в браузере. SQL-тесты запускаются через pg без зависимости от установленного psql, только при QLINE_TEST_DATABASE=true; bootstrap отказывается работать с непустой базой.
 
-Важные ограничения: нет lockfile до успешной установки; hosted Auth settings/SMTP не меняются от одного редактирования CLI config; корпоративные приложения Supabase/Railway отключены администратором; правку настоящего GitHub нельзя безопасно сделать до чтения его содержимого.
+Не подтверждены: GitHub CI result, SMTP-доставка и полный реальный Auth/recovery flow. Регистрация/booking закрыты до утверждённых RU/KZ документов и версии согласия. Клиники не подменяются демонстрационными данными.
