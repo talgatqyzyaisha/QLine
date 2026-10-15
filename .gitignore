@@ -1,0 +1,16 @@
+node_modules/
+.remote-history/
+.local-tools/
+Backend/.env
+Backend/data/
+*.log
+.env
+
+Backend/supabase/.temp/
+supabase/.temp/
+Backend/supabase/.branches/
+dist/
+.openai/
+*.zip
+.env.*
+!**/.env.example

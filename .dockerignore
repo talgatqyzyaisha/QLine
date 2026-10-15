@@ -1,0 +1,16 @@
+.git
+.openai
+.github
+node_modules
+dist
+**/.env
+**/.env.*
+**/test
+**/tests
+Backend/integration
+Backend/data
+Backend/supabase
+**/*.log
+**/*.zip
+.remote-history/
+.local-tools/

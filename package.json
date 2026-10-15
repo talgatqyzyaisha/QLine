@@ -1,0 +1,31 @@
+{
+  "name": "qline",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch --env-file-if-exists=Backend/.env Backend/src/server.js",
+    "start": "node --env-file-if-exists=Backend/.env Backend/src/server.js",
+    "test": "node --test Backend/test/*.test.js Frontend/test/*.test.js",
+    "check": "node scripts/check.mjs",
+    "build": "node scripts/build.mjs",
+    "test:db": "node scripts/test-db.mjs",
+    "test:http": "node --test Backend/integration/http.test.js",
+    "test:concurrency": "node scripts/test-concurrency.mjs",
+    "doctor": "node --env-file-if-exists=Backend/.env scripts/doctor.mjs",
+    "db:link": "npx supabase --workdir Backend link --project-ref aszdjopjlzfkyqguqeps",
+    "db:push": "npx supabase --workdir Backend db push"
+  },
+  "engines": {
+    "node": ">=22.15"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.1.0",
+    "helmet": "^8.1.0"
+  },
+  "devDependencies": {
+    "pg": "^8.23.1"
+  }
+}
