@@ -263,6 +263,122 @@ export function createApp({ env = process.env, client: suppliedClient, config: s
     }
   );
 
+  app.get('/api/admin/payment-receipts', async (req, res) => {
+    if (!req.identity?.id || !req.access) {
+      throw new AppError('UNAUTHORIZED', 401);
+    }
+
+    const limitValue = req.query.limit ?? '50';
+    const offsetValue = req.query.offset ?? '0';
+
+    if (
+      !/^\d+$/.test(String(limitValue)) ||
+      !/^\d+$/.test(String(offsetValue))
+    ) {
+      throw new AppError('INVALID', 422);
+    }
+
+    const limit = Number(limitValue);
+    const offset = Number(offsetValue);
+
+    if (
+      !Number.isSafeInteger(limit) ||
+      limit < 1 ||
+      limit > 100 ||
+      !Number.isSafeInteger(offset)
+    ) {
+      throw new AppError('INVALID', 422);
+    }
+
+    const receipts = await client.adminListPaymentReceipts(
+      req.access,
+      limit,
+      offset
+    );
+
+    const safeReceipts = (Array.isArray(receipts) ? receipts : []).map(
+      ({ storage_path, ...receipt }) => receipt
+    );
+
+    res.json(safeReceipts);
+  });
+
+  app.get('/api/admin/payment-receipts/:id/file', async (req, res) => {
+    if (!req.identity?.id || !req.access) {
+      throw new AppError('UNAUTHORIZED', 401);
+    }
+
+    await client.adminListPaymentReceipts(req.access, 1, 0);
+    const receiptId = req.params.id;
+
+    if (
+      !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(receiptId)
+    ) {
+      throw new AppError('INVALID', 422);
+    }
+
+    const receipts = await client.request(
+      '/rest/v1/clinic_payment_receipts?id=eq.' +
+        encodeURIComponent(receiptId) +
+        '&select=storage_path',
+      { token: req.access }
+    );
+
+    const receipt = receipts?.[0];
+
+    if (!receipt?.storage_path) {
+      throw new AppError('NOT_FOUND', 404);
+    }
+
+    const signed = await client.createReceiptSignedUrl(
+      receipt.storage_path,
+      req.access,
+      60
+    );
+
+    if (!signed?.signedURL) {
+      throw new AppError('STORAGE_ERROR', 502);
+    }
+
+    res.json({ url: signed.signedURL });
+  });
+
+  app.post('/api/admin/payment-receipts/:id/review', async (req, res) => {
+    if (!req.identity?.id || !req.access) {
+      throw new AppError('UNAUTHORIZED', 401);
+    }
+
+    const receiptId = req.params.id;
+
+    if (
+      !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(receiptId)
+    ) {
+      throw new AppError('INVALID', 422);
+    }
+
+    const { action, reason } = req.body || {};
+
+    if (!['approve', 'reject'].includes(action)) {
+      throw new AppError('INVALID', 422);
+    }
+
+    if (
+      action === 'reject' &&
+      (typeof reason !== 'string' || !reason.trim() || reason.trim().length > 500)
+    ) {
+      throw new AppError('INVALID', 422);
+    }
+
+    const result = await client.adminReviewPaymentReceipt(
+      req.access,
+      receiptId,
+      action,
+      action === 'reject' ? reason.trim() : null
+    );
+
+    res.json(result);
+  });
+
   app.use('/api', async (req, res) => {
     if (!['GET', 'POST', 'PATCH'].includes(req.method)) throw new AppError('NOT_FOUND', 404);
     if (req.method === 'POST' && ['/appointments', '/clinic-register'].includes(req.path) && !config.legalReady) throw new AppError('LEGAL_PENDING', 503);

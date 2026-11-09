@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node --watch --env-file-if-exists=Backend/.env Backend/src/server.js",
     "start": "node --env-file-if-exists=Backend/.env Backend/src/server.js",
-    "test": "node --test Backend/test/*.test.js Frontend/test/*.test.js",
+    "test": "node --test Backend/test/*.test.js Frontend/test/*.test.js Backend/integration/*.test.js",
     "check": "node scripts/check.mjs",
     "build": "node scripts/build.mjs",
     "test:db": "node scripts/test-db.mjs",

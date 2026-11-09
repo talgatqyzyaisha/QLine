@@ -84,18 +84,54 @@ try {
 }
 
 return {
-request,
-uploadStorage,
-rpc: (token, method, path, body = {}, query = {}) =>
-request('/rest/v1/rpc/qline_api', {
-method: 'POST',
-token,
-body: {
-q_method: method,
-q_path: path,
-q_body: body,
-q_query: query
-}
-})
+  request,
+  uploadStorage,
+  createReceiptSignedUrl: (path, token, expiresIn = 60) => {
+    const storagePath = path
+      .split('/')
+      .map(encodeURIComponent)
+      .join('/');
+
+    return request(
+      '/storage/v1/object/sign/clinic-payment-receipts/' + storagePath,
+      {
+        method: 'POST',
+        token,
+        body: { expiresIn }
+      }
+    );
+  },
+  rpc: (token, method, path, body = {}, query = {}) =>
+    request('/rest/v1/rpc/qline_api', {
+      method: 'POST',
+      token,
+      body: {
+        q_method: method,
+        q_path: path,
+        q_body: body,
+        q_query: query
+      }
+    }),
+
+  adminListPaymentReceipts: (token, limit = 50, offset = 0) =>
+    request('/rest/v1/rpc/q_admin_list_payment_receipts', {
+      method: 'POST',
+      token,
+      body: {
+        p_limit: limit,
+        p_offset: offset
+      }
+    }),
+
+  adminReviewPaymentReceipt: (token, receiptId, action, reason = null) =>
+    request('/rest/v1/rpc/q_admin_review_payment_receipt', {
+      method: 'POST',
+      token,
+      body: {
+        p_receipt_id: receiptId,
+        p_action: action,
+        p_reason: reason
+      }
+    })
 };
 }
