@@ -22,7 +22,7 @@ import {
   protectedView
 }
 from './account.js';
-const tabs=()=>[['overview',L('Обзор','Шолу'),'grid'],['schedule',L('Расписание','Кесте'),'calendar'],['appointments',L('Записи','Жазылулар'),'chat'],['doctors',L('Врачи','Дәрігерлер'),'user'],['services',L('Услуги и цены','Қызметтер мен бағалар'),'tooth'],['profile',L('Профиль клиники','Клиника профилі'),'building'],['analytics',L('Аналитика','Талдау'),'chart'],['notifications',L('Уведомления','Хабарламалар'),'bell']];
+const tabs=()=>[['overview',L('Обзор','Шолу'),'grid'],['schedule',L('Расписание','Кесте'),'calendar'],['appointments',L('Записи','Жазылулар'),'chat'],['doctors',L('Врачи','Дәрігерлер'),'user'],['services',L('Услуги и цены','Қызметтер мен бағалар'),'tooth'],['profile',L('Профиль клиники','Клиника профилі'),'building'],['analytics',L('Аналитика','Талдау'),'chart'],['notifications',L('Уведомления','Хабарламалар'),'bell'],['finance',L('Финансы','Қаржы'),'wallet']];
 const forbidden=()=>({
   html:`<div class="content-narrow"><div class="empty">${icon('shield')}<h1>${L('Нет доступа','Қолжетімділік жоқ')}</h1><p>${L('Для этого раздела нужна соответствующая роль.','Бұл бөлім үшін тиісті рөл қажет.')}</p><a href="/login" class="btn primary">${L('Сменить аккаунт','Аккаунтты ауыстыру')}</a></div></div>`,bind(){
   }
@@ -44,18 +44,50 @@ function emptyData(){
 export async function dashboard(ctx){
   if(!ctx.user)return protectedView();
   if(!['owner','administrator','dentist'].includes(ctx.user.role))return forbidden();
-  const data=await api('/clinic'),c=data.clinic,p=new URLSearchParams(location.search),tab=tabs().some(([t])=>t===p.get('tab'))?p.get('tab'):'overview';
+  const data=await api('/clinic'),c=data.clinic,p=new URLSearchParams(location.search);
   const manager=ctx.user.role!=='dentist';
+  const requestedTab=p.get('tab');
+  const tab=tabs().some(([t])=>t===requestedTab)&&!(requestedTab==='finance'&&!manager)?requestedTab:'overview';
   const doctorOpts=c.doctors.map(d=>[d.id,doctorName(d)]),serviceOpts=c.services.map(s=>[s,serviceName(s)]);
   const requestedDate = p.get('date') || '';
   const currentDate = /^\d{4}-\d{2}-\d{2}$/.test(requestedDate) && !Number.isNaN(Date.parse(requestedDate)) ? requestedDate : localDate();
   const view = ['day', 'week', 'month'].includes(p.get('view')) ? p.get('view') : 'week';
   let content='';
+  const finance=tab==='finance'?await api('/clinic/finance'):null;
   if(tab==='overview'||tab==='analytics'){
     const today=data.appointments.filter(a=>a.starts_at.slice(0,10)===localDate());
     content=`<div class="stats">${[[L('Записи на сегодня','Бүгінгі жазылулар'),today.filter(a=>['pending','confirmed'].includes(a.status)).length],[L('Новые заявки','Жаңа өтінімдер'),data.appointments.filter(a=>a.status==='pending').length],[L('Подтверждены','Расталғандар'),data.appointments.filter(a=>a.status==='confirmed').length],[L('Отменены','Бас тартылғандар'),data.appointments.filter(a=>a.status==='cancelled').length]].map(([t,n])=>`<div class="stat"><span>${t}</span><strong>${n}</strong><small>${L('Данные QLine','QLine деректері')}</small></div>`).join('')}</div>`;
     if(tab==='analytics')content+=`<div class="panel"><h2>${L('Воронка онлайн-записи','Онлайн жазылу кезеңдері')}</h2><div class="summary-line"><small>${L('Все заявки','Барлық өтінімдер')}</small><strong>${data.appointments.length}</strong></div><div class="summary-line"><small>${L('Подтверждено или завершено','Расталған немесе аяқталған')}</small><strong>${data.appointments.filter(a=>['confirmed','completed'].includes(a.status)).length}</strong></div><p class="muted spaced">${L('Конверсия посещений в записи не рассчитывается: аналитика просмотров не подключена.','Қаралымнан жазылуға конверсия есептелмейді: қаралым талдауы қосылмаған.')}</p></div>`;
     else content+=`<div class="section-heading"><h3>${L('Ближайшие приёмы','Алдағы қабылдаулар')}</h3><a class="link" href="/clinic-dashboard?tab=appointments">${L('Все записи','Барлық жазылулар')}${icon('arrow')}</a></div>${tableAppointments(data.appointments.filter(a=>['pending','confirmed'].includes(a.status)&&new Date(a.starts_at)>new Date()).sort((a,b)=>a.starts_at.localeCompare(b.starts_at)),c,ctx.user.role)}`;
+  }
+  if(tab==='finance'){
+    content=`<div class="stats">
+      <div class="stat"><span>${L('Завершённые приёмы','Аяқталған қабылдаулар')}</span><strong>${finance.completed_count}</strong></div>
+      <div class="stat"><span>${L('Начислено всего','Жалпы есептелді')}</span><strong>${money(finance.balance_kzt)}</strong></div>
+      <div class="stat"><span>${L('К оплате по счетам','Шот бойынша төлеу')}</span><strong>${money(finance.unpaid_kzt)}</strong></div>
+    </div>
+    <section class="panel">
+      <h2>${L('Счета','Шоттар')}</h2>
+      ${finance.invoices.length?finance.invoices.map(i=>`
+        <div class="clinic-list-row">
+          <div>
+            <h3>${esc(dateLabel(i.service_month))}</h3>
+            <p>${L('Завершённых приёмов','Аяқталған қабылдаулар')}: ${i.completed_count}</p>
+            <strong>${money(i.amount_kzt)}</strong>
+            <p class="muted">${statusLabel(i.status)}</p>
+          </div>
+          ${i.status==='unpaid'?`
+            <form class="receipt-form" data-invoice="${esc(i.id)}">
+              <label>${L('Квитанция об оплате','Төлем түбіртегі')}
+                <input type="file" name="receipt" accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg" required>
+              </label>
+              <button class="btn primary" type="submit">${L('Отправить','Жіберу')}</button>
+              <p class="form-error" role="alert"></p>
+            </form>
+          `:''}
+        </div>
+      `).join(''):`<p class="muted">${L('Счетов пока нет.','Әзірге шоттар жоқ.')}</p>`}
+    </section>`;
   }
   if(tab==='appointments'){
     const q=p.get('q')||'',status=p.get('status')||'';
@@ -79,7 +111,7 @@ export async function dashboard(ctx){
   if(tab==='profile')content=manager?`<div class="panel"><form id="clinic-profile" class="form-grid" novalidate>${field('name',L('Название','Атауы'),{required:true,value:c.name})}<div class="form-two">${field('addressRu',L('Адрес на русском','Орыс тіліндегі мекенжайы'),{value:c.addressRu})}${field('addressKz',L('Адрес на казахском','Қазақ тіліндегі мекенжайы'),{value:c.addressKz})}</div>${field('descriptionRu',L('Описание на русском','Орыс тіліндегі сипаттамасы'),{type:'textarea',value:c.descriptionRu})}${field('descriptionKz',L('Описание на казахском','Қазақ тіліндегі сипаттамасы'),{type:'textarea',value:c.descriptionKz})}${field('hours',L('Часы работы (для карточки)','Жұмыс уақыты (карточка үшін)'),{value:c.hours})}<p class="form-error" role="alert"></p><button class="btn primary" type="submit">${L('Сохранить профиль','Профильді сақтау')}</button></form></div>`:emptyData();
   if(tab==='notifications')content=manager?`<div class="panel"><h3>${L('Настройки уведомлений','Хабарлама баптаулары')}</h3><p class="muted spaced">${L('Каналы SMS и email пока не подключены. Настройки сохраняются для будущей интеграции.','SMS және email арналары әлі қосылмаған. Баптаулар болашақ интеграция үшін сақталады.')}</p><form id="notifications-form" class="form-grid spaced" novalidate><label class="checkbox"><input type="checkbox" name="bookings" ${data.notifications?.bookings?'checked':''}>${L('Новые записи','Жаңа жазылулар')}</label><label class="checkbox"><input type="checkbox" name="cancellations" ${data.notifications?.cancellations?'checked':''}>${L('Отмены и переносы','Бас тартулар мен ауыстырулар')}</label><p class="form-error" role="alert"></p><button class="btn primary" type="submit">${L('Сохранить настройки','Баптауларды сақтау')}</button></form></div>`:emptyData();
   return {
-    html:`<div class="workspace"><aside class="workspace-sidebar"><small>${esc(c.name)}</small><nav class="sidebar-links">${tabs().filter(([id])=>manager||!['profile','notifications'].includes(id)).map(([id,t,i])=>`<a class="${tab===id?'active':''}" href="/clinic-dashboard?tab=${id}">${icon(i)}${t}</a>`).join('')}</nav></aside><div class="workspace-main"><div class="workspace-heading"><div><h1>${tabs().find(([id])=>id===tab)[1]}</h1><p>${dateLabel(localDate())} · ${esc(c.name)}</p></div><span class="badge">${ctx.user.role==='owner'?L('Владелец','Иесі'):ctx.user.role==='dentist'?L('Врач','Дәрігер'):L('Администратор','Әкімші')}</span></div>${!c.approved?`<div class="notice warning">${L('Карточка клиники ожидает проверки и пока не видна пациентам.','Клиника карточкасы тексерілуде және пациенттерге әлі көрінбейді.')}</div>`:''}${content}</div></div>`,bind(){
+    html:`<div class="workspace"><aside class="workspace-sidebar"><small>${esc(c.name)}</small><nav class="sidebar-links">${tabs().filter(([id])=>manager||!['profile','notifications','finance'].includes(id)).map(([id,t,i])=>`<a class="${tab===id?'active':''}" href="/clinic-dashboard?tab=${id}">${icon(i)}${t}</a>`).join('')}</nav></aside><div class="workspace-main"><div class="workspace-heading"><div><h1>${tabs().find(([id])=>id===tab)[1]}</h1><p>${dateLabel(localDate())} · ${esc(c.name)}</p></div><span class="badge">${ctx.user.role==='owner'?L('Владелец','Иесі'):ctx.user.role==='dentist'?L('Врач','Дәрігер'):L('Администратор','Әкімші')}</span></div>${!c.approved?`<div class="notice warning">${L('Карточка клиники ожидает проверки и пока не видна пациентам.','Клиника карточкасы тексерілуде және пациенттерге әлі көрінбейді.')}</div>`:''}${content}</div></div>`,bind(){
       const bindForm=(id,path,method='POST',transform=x=>x)=>{
         const f=document.getElementById(id);
         if(!f)return;
@@ -188,6 +220,42 @@ export async function dashboard(ctx){
           tab:'appointments',...Object.fromEntries(new FormData(filters))
         }));
       };
+      document.querySelectorAll('.receipt-form').forEach(f=>{
+        f.onsubmit=async e=>{
+          e.preventDefault();
+          const button=f.querySelector('[type=submit]');
+          const error=f.querySelector('.form-error');
+          const file=f.elements.namedItem('receipt').files[0];
+          if(!file)return;
+
+          button.disabled=true;
+          error.textContent='';
+
+          try{
+            const formData=new FormData();
+            formData.append('receipt',file);
+
+            const response=await fetch(
+              '/api/clinic/invoices/'+encodeURIComponent(f.dataset.invoice)+'/receipt',
+              {
+                method:'POST',
+                credentials:'same-origin',
+                body:formData
+              }
+            );
+            const result=await response.json();
+
+            if(!response.ok)throw new Error(result.code||'UPLOAD_FAILED');
+
+            toast(L('Квитанция отправлена на проверку','Түбіртек тексеруге жіберілді'));
+            ctx.render();
+          }catch(e){
+            error.textContent=L('Не удалось отправить квитанцию. Попробуйте ещё раз.','Түбіртекті жіберу мүмкін болмады. Қайталап көріңіз.');
+          }finally{
+            button.disabled=false;
+          }
+        };
+      });
     }
   };
 }
@@ -195,12 +263,53 @@ export async function admin(ctx){
   if(!ctx.user)return protectedView();
   if(ctx.user.role!=='platform_admin')return forbidden();
   const d=await api('/admin'),p=new URLSearchParams(location.search),tab=p.get('tab')||'clinics';
-  const sections=[['clinics',L('Клиники','Клиникалар'),'building'],['categories',L('Категории услуг','Қызмет санаттары'),'tooth'],['complaints',L('Жалобы','Шағымдар'),'chat'],['users',L('Доступ пользователей','Пайдаланушы рұқсаты'),'user'],['audit',L('Журнал аудита','Аудит журналы'),'shield']];
+  const sections=[['clinics',L('Клиники','Клиникалар'),'building'],['categories',L('Категории услуг','Қызмет санаттары'),'tooth'],['complaints',L('Жалобы','Шағымдар'),'chat'],['users',L('Доступ пользователей','Пайдаланушы рұқсаты'),'user'],['audit',L('Журнал аудита','Аудит журналы'),'shield'],['finance',L('Финансы','Қаржы'),'wallet']];
   let content='';
+  const financeInvoices=tab==='finance'?await api('/admin/invoices'):[];
+  const receipts=tab==='finance'?await api('/admin/payment-receipts?limit=50&offset=0'):[];
   if(tab==='clinics')content=`<div class="stats"><div class="stat"><span>${L('Клиники','Клиникалар')}</span><strong>${d.clinics.length}</strong></div><div class="stat"><span>${L('На проверке','Тексерілуде')}</span><strong>${d.clinics.filter(c=>!c.approved).length}</strong></div><div class="stat"><span>${L('Всего заявок','Барлық өтінімдер')}</span><strong>${d.appointments}</strong></div></div><div class="panel">${d.clinics.map(c=>`<div class="clinic-list-row"><div><h3>${esc(c.name)}</h3><p>${esc(c.addressRu)}</p><span class="badge ${c.approved?'confirmed':'pending'}">${c.approved?L('Опубликована','Жарияланған'):L('Ожидает проверки','Тексеруді күтуде')}</span></div><button class="btn ${c.approved?'':'primary'}" data-moderate="${esc(c.id)}" data-approved="${!c.approved}">${c.approved?L('Скрыть карточку','Карточканы жасыру'):L('Подтвердить клинику','Клиниканы растау')}</button></div>`).join('')}</div>`;
   if(tab==='categories')content=`<div class="panel">${d.services.map(s=>`<div class="service-row">${esc(nameOf(s,lang))}</div>`).join('')}<form id="category-form" class="form-grid spaced" novalidate><h3>${L('Новая категория','Жаңа санат')}</h3>${field('ru',L('Название на русском','Орыс тіліндегі атауы'),{required:true})}${field('kz',L('Название на казахском','Қазақ тіліндегі атауы'),{required:true})}<p class="form-error" role="alert"></p><button class="btn primary" type="submit">${L('Добавить категорию','Санат қосу')}</button></form></div>`;
   if(tab==='complaints')content=d.complaints.length?`<div class="panel">${d.complaints.map(x=>`<div class="clinic-list-row"><p>${esc(x.text)}</p><span>${esc(x.status)}</span><button class="btn small" data-resolve="${esc(x.id)}">${L('Завершить рассмотрение','Қарауды аяқтау')}</button></div>`).join('')}</div>`:`<div class="empty">${icon('shield')}<h2>${L('Нет обращений','Өтініштер жоқ')}</h2><p>${L('Жалобы появятся после подключения канала поддержки.','Шағымдар қолдау арнасы қосылғаннан кейін пайда болады.')}</p></div>`;
   if(tab==='users')content=`<div class="panel">${d.users.filter(u=>u.id!==ctx.user.id).map(u=>`<div class="clinic-list-row"><div><h3>${esc(u.name||L('Пользователь','Пайдаланушы'))}</h3><p>${esc(u.id)}</p></div><button class="btn small" data-user="${esc(u.id)}" data-blocked="${!u.blocked}">${u.blocked?L('Восстановить доступ','Қолжетімділікті қалпына келтіру'):L('Заблокировать','Бұғаттау')}</button></div>`).join('')||`<p class="muted">${L('Других пользователей пока нет.','Басқа пайдаланушылар әзірге жоқ.')}</p>`}</div>`;
+  if(tab==='finance'){
+    content=`
+      <section class="panel">
+        <h2>${L('Счета клиник','Клиникалардың шоттары')}</h2>
+        ${financeInvoices.length?financeInvoices.map(i=>`
+          <div class="clinic-list-row">
+            <div>
+              <h3>${esc(i.clinic_name||'')}</h3>
+              <p>${esc(dateLabel(i.service_month))}</p>
+              <strong>${money(i.amount_kzt)}</strong>
+              <p class="muted">${statusLabel(i.status)}</p>
+            </div>
+          </div>
+        `).join(''):`<p class="muted">${L('Счетов пока нет.','Әзірге шоттар жоқ.')}</p>`}
+      </section>
+
+      <section class="panel">
+        <h2>${L('Квитанции на проверку','Тексеруге арналған түбіртектер')}</h2>
+        ${receipts.length?receipts.map(r=>`
+          <div class="clinic-list-row">
+            <div>
+              <h3>${esc(r.clinic_name||'')}</h3>
+              <p>${esc(dateLabel(r.service_month))}</p>
+              <strong>${money(r.amount_kzt)}</strong>
+              <p class="muted">${statusLabel(r.status)}</p>
+              ${r.rejection_reason?`<p>${esc(r.rejection_reason)}</p>`:''}
+            </div>
+            <div class="actions">
+              <button class="btn" type="button" data-receipt-view="${esc(r.id)}">${L('Открыть','Ашу')}</button>
+              ${r.status==='pending'?`
+                <button class="btn primary" type="button" data-receipt-approve="${esc(r.id)}">${L('Подтвердить','Растау')}</button>
+                <button class="btn" type="button" data-receipt-reject="${esc(r.id)}">${L('Отклонить','Қабылдамау')}</button>
+              `:''}
+            </div>
+          </div>
+        `).join(''):`<p class="muted">${L('Новых квитанций нет.','Жаңа түбіртектер жоқ.')}</p>`}
+      </section>
+    `;
+  }
   if(tab==='audit')content=dataTable(
     L('Журнал аудита', 'Аудит журналы'),
     [L('Время (Алматы)', 'Уақыт (Алматы)'), L('Действие', 'Әрекет'), L('Объект', 'Нысан')],
@@ -249,6 +358,64 @@ export async function admin(ctx){
           b.disabled=false;
         }
       };
+
+      document.querySelectorAll('[data-receipt-view]').forEach(b=>b.onclick=async()=>{
+      const receiptWindow=window.open('about:blank','_blank');
+      if(!receiptWindow){
+        toast(L('Разрешите всплывающие окна для просмотра квитанции.','Түбіртекті көру үшін қалқымалы терезелерге рұқсат беріңіз.'));
+        return;
+      }
+      receiptWindow.opener=null;
+      b.disabled=true;
+      try{
+        const result=await api('/admin/payment-receipts/'+encodeURIComponent(b.dataset.receiptView)+'/file');
+        receiptWindow.location.href=result.url;
+      }catch(e){
+        receiptWindow.close();
+        toast(errorText(e));
+      }finally{
+        b.disabled=false;
+      }
+    });
+
+      document.querySelectorAll('[data-receipt-approve]').forEach(b=>b.onclick=async()=>{
+        if(!await ask(
+          L('Подтвердить оплату?','Төлемді растайсыз ба?'),
+          L('Подтверждайте только после самостоятельной проверки поступления денег на счёт. Квитанция сама по себе не подтверждает оплату.','Төлемнің шотқа түскенін өзіңіз тексергеннен кейін ғана растаңыз. Түбіртектің өзі төлемді растамайды.'),
+          L('Подтвердить','Растау')
+        ))return;
+        b.disabled=true;
+        try{
+          await api('/admin/payment-receipts/'+encodeURIComponent(b.dataset.receiptApprove)+'/review',{
+            method:'POST',body:{action:'approve'}
+          });
+          toast(L('Оплата подтверждена','Төлем расталды'));
+          ctx.render();
+        }catch(e){
+          toast(errorText(e));
+          b.disabled=false;
+        }
+      });
+
+      document.querySelectorAll('[data-receipt-reject]').forEach(b=>b.onclick=async()=>{
+        const reason=prompt(L('Укажите причину отклонения квитанции:','Түбіртекті қабылдамау себебін көрсетіңіз:'));
+        if(reason===null)return;
+        if(!reason.trim()){
+          toast(L('Укажите причину отклонения.','Қабылдамау себебін көрсетіңіз.'));
+          return;
+        }
+        b.disabled=true;
+        try{
+          await api('/admin/payment-receipts/'+encodeURIComponent(b.dataset.receiptReject)+'/review',{
+            method:'POST',body:{action:'reject',reason:reason.trim()}
+          });
+          toast(L('Квитанция отклонена','Түбіртек қабылданбады'));
+          ctx.render();
+        }catch(e){
+          toast(errorText(e));
+          b.disabled=false;
+        }
+      });
     }
   };
 }
