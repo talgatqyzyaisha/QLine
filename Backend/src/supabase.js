@@ -18,12 +18,6 @@ try {
   const data = await response.json().catch(() => null);
   if (!response.ok) {
     const message = data?.message || data?.error_description || data?.msg || '';
-    console.error('[Supabase error]', {
-      path,
-      status: response.status,
-      code: data?.code,
-      message
-    });
     const providerCode = data?.error_code || data?.code || '';
     if (response.status === 429) throw new AppError('RATE_LIMITED', 429);
     if (path.startsWith('/auth/v1/token?grant_type=password')) throw new AppError('INVALID_CREDENTIALS', 401);
