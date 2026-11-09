@@ -43,7 +43,7 @@ function emptyData(){
 }
 export async function dashboard(ctx){
   if(!ctx.user)return protectedView();
-  if(!['owner','administrator','dentist'].includes(ctx.user.role))return forbidden();
+  if(!['owner','administrator','dentist', 'platform_admin'].includes(ctx.user.role))return forbidden();
   const data=await api('/clinic'),c=data.clinic,p=new URLSearchParams(location.search);
   const manager=ctx.user.role!=='dentist';
   const requestedTab=p.get('tab');
